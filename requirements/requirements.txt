@@ -12,6 +12,7 @@ langchain-openai>=0.1,<0.2
 datasets>=2.19,<3
 openai>=1.30,<2
 numpy>=1.26,<2
+pyarrow>=15.0.0,<19
 
 # ── Track 3A: LLM Judge ────────────────────────────────────────────────────
 scipy>=1.11,<2                   # Scientific dependencies; κ can be computed manually

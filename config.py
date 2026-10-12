@@ -6,8 +6,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- API Keys ---
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "") or os.getenv("OLLAMA_API_KEY", "")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://ollama.com/v1")
 HF_TOKEN = os.getenv("HF_TOKEN", "")  # Optional: for HuggingFace models
+LLM_MODEL = os.getenv("LLM_MODEL", "gpt-oss:120b-cloud")
+
+# Expose to os.environ so OpenAI client picks them up automatically
+if OPENAI_API_KEY and not os.environ.get("OPENAI_API_KEY"):
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+if OPENAI_BASE_URL and not os.environ.get("OPENAI_BASE_URL"):
+    os.environ["OPENAI_BASE_URL"] = OPENAI_BASE_URL
 
 # --- Qdrant (same as Day 18) ---
 QDRANT_HOST = "localhost"
@@ -29,6 +37,7 @@ BM25_TOP_K = 20
 DENSE_TOP_K = 20
 HYBRID_TOP_K = 20
 RERANK_TOP_K = 3
+RRF_K = 60
 
 # --- Paths ---
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -45,8 +54,8 @@ GUARDRAILS_CONFIG_DIR = os.path.join(ROOT_DIR, "guardrails")
 PAIR_QUESTION_IDS = (1, 5, 12, 21, 41)
 
 # --- LLM Judge ---
-GENERATION_MODEL = "gpt-4o-mini"
-JUDGE_MODEL = "gpt-4o-mini"
+GENERATION_MODEL = os.getenv("GENERATION_MODEL", LLM_MODEL)
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", LLM_MODEL)
 
 # --- Guardrail latency budget ---
 LATENCY_BUDGET_P95_MS = 500  # Full guard target; Task 12 currently measures input guards only.
